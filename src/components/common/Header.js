@@ -12,10 +12,6 @@ const HeaderWrapper = styled.div`
   box-shadow: 0px 2px 4px gray;
 `;
 
-const Spacer = styled.div`
-  height: 4rem;
-`;
-
 const Header = () => {
     return (
         <>
@@ -27,7 +23,6 @@ const Header = () => {
                     </Link>
                 </div>
             </HeaderWrapper>
-        <Spacer />
         </>
     );
 };

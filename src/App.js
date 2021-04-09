@@ -4,16 +4,18 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import PostListPage from "./pages/PostListPage";
 import MovieListPage from "./pages/MovieListPage";
+import MovieDetailPage from "./pages/MovieDetailPage";
 
 const App = () => {
  return (
      <>
-         <Route component={PostListPage} path={["/@:username", "/"]} exact/>
+         <Route component={MovieListPage} path={["/movie", "/"]} exact />
+         <Route component={PostListPage} path="/@:username"/>
          <Route component={LoginPage} path="/login"/>
          <Route component={RegisterPage} path="/register"/>
-         <Route component={MovieListPage} path="/movie"/>
+         <Route component={MovieDetailPage} path="/MovieDetail"/>
      </>
  );
-};
+}
 
 export default App;

@@ -1,10 +1,12 @@
 .movie-li {
     display: block;
     float: left;
-    width: 188px;
+    width: 194px;
     height: 350px;
-    margin: 18px;
-    position: relative
+    margin: 14px;
+    position: relative;
+    border: 1px solid lightgray;
+    border-radius: 12px;
 }
 
 .button-wrapper {
@@ -16,6 +18,7 @@
 }
 
 .poster-image {
+    width: 140px;
     height: 100%;
 }
 
@@ -23,4 +26,8 @@
     display: inline-block;
     text-align: center;
     line-height: 200px;
+}
+
+.movie-name {
+    padding: 0 4px 0 4px;
 }
