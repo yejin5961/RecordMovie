@@ -2,16 +2,17 @@ import React, {useEffect, useState} from "react";
 import styled from 'styled-components';
 import '../../style/movie.css';
 import {naverMoviesApi} from '../../api';
-// import noPosterImg from '/public/logo192.png';
+import {Link} from 'react-router-dom';
 
 /*
 * 영화 목록 중 하나
  */
-const Movie = styled.div`
+const MovieCard = styled.div`
   text-align: center;
+  padding: 24px 0 26px 0;
 `;
 
-const MoviePoster = styled.div`
+const MoviePosterWrapper = styled.div`
   width: 180px;
   height: 200px;
   right: 0;
@@ -19,25 +20,25 @@ const MoviePoster = styled.div`
   display: inline-block
 `;
 
-const MovieCard = (props) => {
+const Movie = (props) => {
     let [poster, setPoster] = useState('');
 
     async function getSearchMovie() {
-        console.log('search Movie');
         const search = props.movie.movieNm;
 
         try {
             if (search === "") {
                 // this.setState({movies: [], isLoading: false})
             } else {
-                const {data: {
-                    items
-                }} = await naverMoviesApi.search(search);
+                const {
+                    data: {
+                        items
+                    }
+                } = await naverMoviesApi.search(search);
 
-                const movie = items.filter((item)=> {
+                const movie = items.filter((item) => {
                     return item.image
                 });
-
 
                 setPoster(movie[0].image);
             }
@@ -54,22 +55,28 @@ const MovieCard = (props) => {
     return (
         <>
             <li className="movie-li">
-                <Movie>
+                <MovieCard>
                     <div>
-                        <MoviePoster>
+                        <MoviePosterWrapper>
                             {
-                                poster ?   <img className="poster-image no-image" src={poster} /> : <span className="no-image">no image</span>
+                                poster ?
+                                    <Link to="/MovieDetail">
+                                        <img className="poster-image" src={poster} />
+                                    </Link> :
+                                    <Link to="/MovieDetail">
+                                        <span className="no-image">no image</span>
+                                    </Link>
                             }
-                        </MoviePoster>
+                        </MoviePosterWrapper>
 
                         <p className="movie-name">{props.movie.movieNm}</p>
                         <span className="movie-year">{props.movie.prdtYear}년도</span>
                         <span className="movie-genre">{props.movie.genreAlt}</span>
                     </div>
-                </Movie>
+                </MovieCard>
             </li>
         </>
     );
 };
 
-export default MovieCard;
+export default Movie;
