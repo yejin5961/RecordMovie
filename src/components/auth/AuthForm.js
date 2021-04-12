@@ -1,15 +1,10 @@
 import React, {useState} from "react";
 import styled from 'styled-components';
-import {Link} from 'react-router-dom';
-import Button from "../common/Button";
-import KakaoLogin from "../common/KakaoLogin"
+import KakaoLogin from "../common/KakaoLogin";
+import {LoginContext} from "../common/LoginContext";
 
 const AuthFormWrapper = styled.div`
-h3 {
-  margin: 0;
-  color: gray;
-  margin-bottom: 1rem;
-}
+  text-align: center;
 `;
 
 const Input = styled.input`
@@ -29,21 +24,22 @@ const Input = styled.input`
 `
 
 const AuthForm = () => {
-    let [isLogin, setIsLogin] = useState(false);
-
     return (
         <AuthFormWrapper>
-            <h3>카 카 오 로 그 인</h3>
-            <form>
-                <Input autoComplete="username" name="username" placeholder="카카오 이메일" />
-                <Input autoComplete="new-password" name="password" placeholder="비밀번호" type="password" />
-            </form>
-            <Link to={"/register"}>회원가입</Link>
-            <Link to={"/"}>
-                <Button cyan fullWidth style={{marginTop: '1rem'}} onClick={KakaoLogin}>
-                    로그인
-                </Button>
-            </Link>
+            <h2>소셜 간편 로그인</h2>
+            <KakaoLogin></KakaoLogin>
+
+            {/*<h3>카 카 오 로 그 인</h3>*/}
+            {/*<form>*/}
+            {/*    <Input autoComplete="username" name="username" placeholder="카카오 이메일" />*/}
+            {/*    <Input autoComplete="new-password" name="password" placeholder="비밀번호" type="password" />*/}
+            {/*</form>*/}
+            {/*<Link to={"/register"}>회원가입</Link>*/}
+            {/*<Link to={"/"}>*/}
+            {/*    <Button cyan fullWidth style={{marginTop: '1rem'}} onClick={KakaoLogin}>*/}
+            {/*        로그인*/}
+            {/*    </Button>*/}
+            {/*</Link>*/}
         </AuthFormWrapper>
     );
 };

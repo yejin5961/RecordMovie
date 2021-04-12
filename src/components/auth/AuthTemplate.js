@@ -1,6 +1,7 @@
 import React from "react";
 import styled from 'styled-components';
 import {Link} from 'react-router-dom';
+import Button from "../common/Button";
 
 /*
 * 회원가입 / 로그인 페이지 레이아웃
@@ -21,11 +22,11 @@ const AuthTemplateWrapper = styled.div`
 const WhiteBox = styled.div`
   .logo-area {
     display: block;
-    padding-bottom: 2rem;
-    text-align: center;
+    padding-bottom: 1rem;
     font-weight: bold;
     letter-spacing: 2px;
   }
+  position: relative;
   box-shadow: 0 0 8px gray;
   padding: 2rem;
   width: 360px;
@@ -33,12 +34,23 @@ const WhiteBox = styled.div`
   border-radius: 2px;
 `;
 
+const closeButton = {
+    position: "absolute",
+    right: "14px",
+    top: "14px"
+}
+
 const AuthTemplate = ({children}) => {
+
     return (
         <AuthTemplateWrapper>
             <WhiteBox>
+            <Link to="/">
+                <Button to="/" style={closeButton}>닫기</Button>
+            </Link>
+
                 <div className="logo-area">
-                    <Link to="/">REACTERS</Link>
+                    {/*<Link to="/">Record Movie</Link>*/}
                 </div>
                 {children}
             </WhiteBox>
