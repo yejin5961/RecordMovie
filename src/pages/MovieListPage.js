@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import styled from 'styled-components';
 import Movie from "../components/movie/Movie";
 import Header from "../components/common/Header";
@@ -6,6 +6,8 @@ import Search from "../components/movie/Search";
 import '../App.css';
 import {kobisMoviesApi} from "../api";
 import axios from 'axios';
+import Pager from "../components/common/Pager";
+import {LoginContext} from "../components/common/LoginContext";
 
 const MovieListWrapper = styled.div`
   width: 1120px;
@@ -20,16 +22,24 @@ const ulStyle = {
     display: "inline-block",
 }
 
+const defaultPagerValue = {
+    total: 0,
+    buttonCount: 10,
+    currentPage: 1
+}
+
 const MovieListPage = () => {
     let [movies, setMovies] = useState([]);
+    let [pagerState, setPagerState] = useState(defaultPagerValue );
 
     async function getMovieList(props) {
-        const pageNum = props ? props.target.getAttribute('pageNum') : "1";
+        const pageNum = props ? props : 1;
 
         try {
             const {
                 data: {
                     movieListResult: {
+                        totCnt,
                         movieList
                     }
                 }
@@ -39,7 +49,14 @@ const MovieListPage = () => {
             movieListCopy = movieList;
             setMovies(movieListCopy);
 
-            console.log(movieList);
+            setPagerState({
+                ...pagerState,
+                total: totCnt,
+                currentPage: parseInt(pageNum)
+            });
+
+            console.log(pagerState);
+
         } catch (error) {
             console.log(error);
         }
@@ -51,10 +68,16 @@ const MovieListPage = () => {
     /* Search 컴포넌트 (자식)에서 MovieListPage(부모)로
     *  검색 결과 리스트를 전달하기 위함
     * */
-    const onSearchSubmit = (searchMovieList) => {
+    const onSearchSubmit = (searchMovieList, total) => {
         let movieListCopy = [...movies];
         movieListCopy = searchMovieList;
         setMovies(movieListCopy);
+
+        setPagerState({
+            ...pagerState,
+            total: total,
+            currentPage: 1
+        })
     };
 
     return (
@@ -72,9 +95,7 @@ const MovieListPage = () => {
                 }
                 </ul>
                 <div className="button-wrapper">
-                    <button onClick={getMovieList} pageNum="1">1</button>
-                    <button onClick={getMovieList} pageNum="2">2</button>
-                    <button onClick={getMovieList} pageNum="3">3</button>
+                    <Pager onClick={getMovieList} state={pagerState}></Pager>
                 </div>
             </MovieListWrapper>
         </>

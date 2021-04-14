@@ -32,6 +32,7 @@ const Search = (props) => {
             const {
                 data: {
                     movieListResult: {
+                        totCnt,
                         movieList
                     }
                 }
@@ -42,7 +43,7 @@ const Search = (props) => {
             movieList2 = movieList;
             setSearchResult(movieList2);
 
-            props.onSubmit(movieList2); // 부모로 검색 결과 리스트 전달
+            props.onSubmit(movieList2, totCnt); // 부모로 검색 결과 리스트 전달
         } catch (error) {
             console.log(error);
         }
