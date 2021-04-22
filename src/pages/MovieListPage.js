@@ -25,37 +25,49 @@ const ulStyle = {
 const defaultPagerValue = {
     total: 0,
     buttonCount: 10,
-    currentPage: 1
+    currentPage: 1,
+    keyword: ''
 }
 
 const MovieListPage = () => {
     let [movies, setMovies] = useState([]);
     let [pagerState, setPagerState] = useState(defaultPagerValue );
+    let result, totCnt, movieList;
+    let movieListCopy;
 
     async function getMovieList(props) {
-        const pageNum = props ? props : 1;
-
         try {
-            const {
-                data: {
-                    movieListResult: {
-                        totCnt,
-                        movieList
-                    }
-                }
-            }  = await kobisMoviesApi.list(pageNum);
+             console.log(pagerState)
+            if (!props) {
+                result = await kobisMoviesApi.list(1);
+                totCnt = result.data.movieListResult.totCnt;
 
-            let movieListCopy = [...movies];
+                setPagerState({
+                    ...pagerState,
+                    total: totCnt,
+                    currentPage: 1,
+                    keyword: ''
+                })
+            } else {
+                if (pagerState.keyword) {
+                    result = await kobisMoviesApi.search(pagerState.keyword, props);
+
+                    setPagerState({
+                        ...pagerState,
+                        currentPage: props,
+                        keyword: pagerState.keyword
+                    })
+                } else {
+                    result = await kobisMoviesApi.list(props);
+                }
+
+            }
+
+            movieList = result.data.movieListResult.movieList;
+
+            movieListCopy = [...movieList];
             movieListCopy = movieList;
             setMovies(movieListCopy);
-
-            setPagerState({
-                ...pagerState,
-                total: totCnt,
-                currentPage: parseInt(pageNum)
-            });
-
-            console.log(pagerState);
 
         } catch (error) {
             console.log(error);
@@ -68,7 +80,7 @@ const MovieListPage = () => {
     /* Search 컴포넌트 (자식)에서 MovieListPage(부모)로
     *  검색 결과 리스트를 전달하기 위함
     * */
-    const onSearchSubmit = (searchMovieList, total) => {
+    const onSearchSubmit = (searchMovieList, total, keyword) => {
         let movieListCopy = [...movies];
         movieListCopy = searchMovieList;
         setMovies(movieListCopy);
@@ -76,7 +88,8 @@ const MovieListPage = () => {
         setPagerState({
             ...pagerState,
             total: total,
-            currentPage: 1
+            currentPage: 1,
+            keyword: keyword
         })
     };
 

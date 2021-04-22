@@ -21,10 +21,11 @@ export const kobisMoviesApi = {
             curPage: page
         }
     }),
-    search: keyword => kobisApi.get('/kobisopenapi/webservice/rest/movie/searchMovieList.json', {
+    search: (keyword, page) => kobisApi.get('/kobisopenapi/webservice/rest/movie/searchMovieList.json', {
         params: {
             key: KEY,
-            movieNm: keyword
+            movieNm: keyword,
+            curPage: page
         }
     })
 };

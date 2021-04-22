@@ -9,8 +9,6 @@ const Pager = (props) => {
     const [start, setStart] = useState(1);
     const [current, setCurrent] = useState(currentPage);
 
-    console.log('누가 먼저 ')
-
     const setDisplayButtonCount = () => {
         if ((total / count) < 10) {
             if (total / count < 1) {
@@ -57,17 +55,20 @@ const Pager = (props) => {
         props.onClick(e.target.getAttribute('pageNum'));
     }
 
-
     return (
         <>
-            <Link className="pager-button pager-button-prev" onClick={clickArrowButton}/>
+            {
+                count === 10 ? <Link className="pager-button pager-button-prev" onClick={clickArrowButton}/> : ''
+            }
             {
                 [...Array(count)].map((n, i) => {
                 return (
                     <Link key={i} className={start + i === current ? "pager-button select" : "pager-button"} pageNum={start + i} onClick={clickPage} > {start + i}</Link>
                 )})
             }
-            <Link className="pager-button pager-button-next" onClick={clickArrowButton}/>
+            {
+                count === 10 ? <Link className="pager-button pager-button-next" onClick={clickArrowButton}/> : ''
+            }
         </>
     );
 }
