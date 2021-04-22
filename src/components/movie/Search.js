@@ -24,26 +24,35 @@ const Search = (props) => {
     let inputValue = React.createRef();
     let [keyword, setKeyword] = useState('');
     let [searchResult, setSearchResult] = useState([]);
+    let result, totCnt, movieList, text;
 
     async function searchMovie() {
-        setKeyword(inputValue.current.value);
-
         try {
-            const {
-                data: {
-                    movieListResult: {
-                        totCnt,
-                        movieList
-                    }
-                }
-            }  = await kobisMoviesApi.search(inputValue.current.value);
+            text = inputValue.current.value;
+            setKeyword(text !== null ? text : '');
 
+            if (text) {
+                // const {
+                //     data: {
+                //         movieListResult: {
+                //             totCnt,
+                //             movieList
+                //         }
+                //     }
+                // }  = await kobisMoviesApi.search(inputValue.current.value);
+                result = await kobisMoviesApi.search(text, 1);
+            } else {
+                result = await kobisMoviesApi.list(1);
+            }
+
+            totCnt = result.data.movieListResult.totCnt;
+            movieList = result.data.movieListResult.movieList;
 
             let movieList2 = [...searchResult];
             movieList2 = movieList;
             setSearchResult(movieList2);
 
-            props.onSubmit(movieList2, totCnt); // 부모로 검색 결과 리스트 전달
+            props.onSubmit(movieList2, totCnt, text); // 부모로 검색 결과 리스트 전달
         } catch (error) {
             console.log(error);
         }
