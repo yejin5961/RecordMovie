@@ -4,6 +4,9 @@ import '../../style/movie.css';
 import {naverMoviesApi} from '../../api';
 import {Link} from 'react-router-dom';
 
+import { like } from "../../redux/modules/movie";
+import { connect } from "react-redux";
+
 /*
 * 영화 목록 중 하나
  */
@@ -20,8 +23,10 @@ const MoviePosterWrapper = styled.div`
   display: inline-block
 `;
 
+
 const Movie = (props) => {
     let [poster, setPoster] = useState('');
+    let [likeState, setLikeState] = useState(false);
 
     async function getSearchMovie() {
         const search = props.movie.movieNm;
@@ -40,17 +45,27 @@ const Movie = (props) => {
                     return item.image
                 });
 
-                setPoster(movie[0].image);
+                // setPoster(movie[0].image);
             }
         } catch (error) {
             console.log(error);
         }
-    };
+    }
 
     useEffect(() => {
         getSearchMovie();
     }, []);
 
+
+    function clickLike (e) {
+        if (likeState) {
+            e.target.classList.remove('like');
+            setLikeState(false);
+        } else {
+            e.target.classList.add('like');
+            setLikeState(true);
+        }
+    }
 
     return (
         <>
@@ -69,9 +84,15 @@ const Movie = (props) => {
                             }
                         </MoviePosterWrapper>
 
-                        <p className="movie-name">{props.movie.movieNm}</p>
+                        {/*<p className="movie-name">{props.movie.movieNm}</p>*/}
+                        <p className="movie-name">영화 제목</p>
                         <span className="movie-year">{props.movie.prdtYear}년도</span>
                         <span className="movie-genre">{props.movie.genreAlt}</span>
+                        <span className="like">
+                            <div className="like-button"  onClick={props.onLike}/>
+
+                            <span>{props.like}</span>
+                        </span>
                     </div>
                 </MovieCard>
             </li>
@@ -79,4 +100,20 @@ const Movie = (props) => {
     );
 };
 
-export default Movie;
+// export default Movie;
+
+
+const mapStateToProps = state => ({
+    like: state.movie.like
+});
+
+const mapDispatchToProps = dispatch => ({
+    onLike: () => dispatch(like())
+});
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Movie);
+
+
